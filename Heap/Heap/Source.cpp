@@ -25,11 +25,16 @@ TEST(Heap_construction_test, Default_ctor__is_empty)
 	EXPECT_EQ(true, h.is_empty());
 }
 
-TEST(Heap_construction_test, size_type_ctor__size)
+TEST_F(Heap_methods_test, size_test)
 {
-	Heap<int> h(10);
-	EXPECT_EQ(10, h.size());
+	Heap<int> h;
+	for(size_t i=0; i<10; ++i)
+	{
+		h.push(i);
+	}
+	ASSERT_EQ(10, h.size());
 }
+
 
 TEST_F(Heap_methods_test, push_test)
 {
