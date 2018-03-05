@@ -23,13 +23,12 @@ public:
 	using container_type = cont_type;
 
 	Heap();
-	explicit Heap(const size_type&);
 	explicit Heap(const comp_type&);
 
 	template <typename it>
 	Heap(const it& first, const it& last);
 
-	Heap(std::initializer_list<val_type> ls);
+	Heap(const std::initializer_list<val_type>& ls);
 
 	Heap(const std::initializer_list<val_type>& ls, const comp_type& comparer);
 
@@ -59,7 +58,7 @@ private:
 #else
 public:
 #endif
-	cont_type data;
+	cont_type data{0};
 	comp_type pred;
 
 	void swap(val_type& v1, val_type& v2) noexcept;
@@ -70,15 +69,9 @@ public:
 
 template <typename val_type, typename comp_type, typename cont_type>
 Heap<val_type, comp_type, cont_type>::Heap()
-	: data(1)
 {
 }
 
-template <typename val_type, typename comp_type, typename cont_type>
-Heap<val_type, comp_type, cont_type>::Heap(const size_type& size)
-	: data(size+1)
-{
-}
 
 template <typename val_type, typename comp_type, typename cont_type>
 Heap<val_type, comp_type, cont_type>::Heap(const comp_type& f)
@@ -88,22 +81,20 @@ Heap<val_type, comp_type, cont_type>::Heap(const comp_type& f)
 
 template <typename val_type, typename comp_type, typename cont_type>
 template <typename it>
-Heap<val_type, comp_type, cont_type>::Heap(const it& first, const it& last):data(1)
+Heap<val_type, comp_type, cont_type>::Heap(const it& first, const it& last)
 {
 	build(first, last);
 }
 
 template <typename val_type, typename comp_type, typename cont_type>
-Heap<val_type, comp_type, cont_type>::Heap(std::initializer_list<val_type> ls)
-	: data(ls.size() + 1)
+Heap<val_type, comp_type, cont_type>::Heap(const std::initializer_list<val_type>& ls)
 {
 	build(ls.begin(), ls.end());
 }
 
 template <typename val_type, typename comp_type, typename cont_type>
 Heap<val_type, comp_type, cont_type>::Heap(const std::initializer_list<val_type>& ls, const comp_type& comparer)
-	: data(ls.size() + 1),
-	  pred(comparer)
+	  : pred(comparer)
 {
 	build(ls.begin(), ls.end());
 }
@@ -112,7 +103,7 @@ Heap<val_type, comp_type, cont_type>::Heap(const std::initializer_list<val_type>
 template <typename val_type, typename comp_type, typename cont_type>
 template <typename it>
 Heap<val_type, comp_type, cont_type>::Heap(const it& first, const it& last, const comp_type& cm)
-	: pred(cm), data(1)
+	: pred(cm)
 {
 	build(first, last);
 }
