@@ -19,6 +19,8 @@ class Heap
 {
 public:
 	using size_type = typename cont_type::size_type;
+	using value_type = val_type;
+	using container_type = cont_type;
 
 	Heap();
 	explicit Heap(const size_type&);
@@ -27,7 +29,9 @@ public:
 	template <typename it>
 	Heap(const it& first, const it& last);
 
-	Heap(const comp_type& cm, const cont_type& cn);
+	Heap(std::initializer_list<val_type> ls);
+
+	Heap(const std::initializer_list<val_type>& ls, const comp_type& comparer);
 
 	template <typename it>
 	Heap(const it& first, const it& last, const comp_type& cm);
@@ -72,7 +76,7 @@ Heap<val_type, comp_type, cont_type>::Heap()
 
 template <typename val_type, typename comp_type, typename cont_type>
 Heap<val_type, comp_type, cont_type>::Heap(const size_type& size)
-	: data(size)
+	: data(size+1)
 {
 }
 
@@ -84,22 +88,31 @@ Heap<val_type, comp_type, cont_type>::Heap(const comp_type& f)
 
 template <typename val_type, typename comp_type, typename cont_type>
 template <typename it>
-Heap<val_type, comp_type, cont_type>::Heap(const it& first, const it& last)
+Heap<val_type, comp_type, cont_type>::Heap(const it& first, const it& last):data(1)
 {
 	build(first, last);
 }
 
 template <typename val_type, typename comp_type, typename cont_type>
-Heap<val_type, comp_type, cont_type>::Heap(const comp_type& cm, const cont_type& cn)
-	: pred(cm)
+Heap<val_type, comp_type, cont_type>::Heap(std::initializer_list<val_type> ls)
+	: data(ls.size() + 1)
 {
-	build(cn.begin(), cn.end());
+	build(ls.begin(), ls.end());
 }
+
+template <typename val_type, typename comp_type, typename cont_type>
+Heap<val_type, comp_type, cont_type>::Heap(const std::initializer_list<val_type>& ls, const comp_type& comparer)
+	: data(ls.size() + 1),
+	  pred(comparer)
+{
+	build(ls.begin(), ls.end());
+}
+
 
 template <typename val_type, typename comp_type, typename cont_type>
 template <typename it>
 Heap<val_type, comp_type, cont_type>::Heap(const it& first, const it& last, const comp_type& cm)
-	: pred(cm)
+	: pred(cm), data(1)
 {
 	build(first, last);
 }
